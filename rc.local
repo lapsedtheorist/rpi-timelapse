@@ -1,0 +1,25 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+_IP=$(hostname -I) || true
+_WIFI=$(ifconfig wlan0 2>/dev/null) || true
+if [ "$_IP" ]; then
+	# Print the IP address
+	printf "My IP address is %s\n" "$_IP"
+elif [ ! "$_WIFI" ]; then
+	# If there's no Wifi interface, start the timelapse...
+	echo "Starting Timelapse"
+	su -c '/home/pi/rpi-timelapse/timelapse.py &' pi
+fi
+
+exit 0
