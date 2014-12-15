@@ -19,16 +19,11 @@ class Identify(Wrapper):
 
     def __init__(self, subprocess):
         Wrapper.__init__(self, subprocess)
-        self._CMD = 'identify'
-
-    def summary(self, filepath):
-        code, out, err = self.call(self._CMD + " " + filepath)
-        if code != 0:
-            raise Exception(err)
-        return out
+        self._CMD = 'convert'
 
     def mean_brightness(self, filepath):
-        code, out, err = self.call(self._CMD + ' -format "%[mean]" ' + filepath)
+	# Use the thumbnail for the mean brightness check, because it's faster than using the full image
+        code, out, err = self.call(self._CMD + ' ' + filepath + ' thumbnail:- | identify -format "%[mean]" -')
         if code != 0:
             raise Exception(err)
         return out
@@ -38,7 +33,8 @@ class RaspiStill(Wrapper):
 
     def __init__(self, subprocess):
         Wrapper.__init__(self, subprocess)
-        self._CMD = 'raspistill --nopreview --encoding jpg --width 1920 --height 1080 --quality 96 --timeout 200 --awb tungsten'
+	# Create a thumbnail with a useful size for mean brightness checks
+        self._CMD = 'raspistill --nopreview --encoding jpg --width 1920 --height 1080 --quality 96 --thumb 512:288:80 --timeout 200 --awb cloud'
 
     def capture_image_and_download(self):
 	time = datetime.now()
@@ -46,7 +42,7 @@ class RaspiStill(Wrapper):
 	filenamePrefix = "img"
 	shutter = str(eval(compile(self._shutter_choice, '<string>', 'eval', __future__.division.compiler_flag))*1000000)
 	filename = filepath + "/" + filenamePrefix + "-%04d%02d%02d-%02d%02d%02d.jpg" % (time.year, time.month, time.day, time.hour, time.minute, time.second)
-        code, out, err = self.call(self._CMD + " --shutter " + shutter + " --ISO " + self._iso_choice + " --output " + filename)
+        code, out, err = self.call(self._CMD + ' --shutter ' + shutter + ' --ISO ' + self._iso_choice + ' --output ' + filename)
         if code != 0:
             raise Exception(err)
         return filename
