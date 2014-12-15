@@ -14,8 +14,7 @@ logfile = os.path.dirname(os.path.realpath(__file__)) + "/timelapse.log"
 sys.stdout = open(logfile, 'w')
 
 MIN_INTER_SHOT_DELAY_SECONDS = timedelta(seconds=30)
-MIN_BRIGHTNESS = 22500
-MAX_BRIGHTNESS = 27500
+TARGET_BRIGHTNESS = 25000 # Acceptable values +/- 10%
 
 CONFIGS = [
 	("1/8000", 100),
@@ -82,7 +81,7 @@ def main():
     camera = RaspiStill(subprocess)
     idy = Identify(subprocess)
 
-    current_config = 20
+    current_config = 19
     shot = 0
     prev_acquired = None
     last_acquired = None
@@ -91,8 +90,9 @@ def main():
     try:
         while True:
             last_started = datetime.now()
+            shot = shot + 1
             config = CONFIGS[current_config]
-            print "Shot: %d Shutter: %s ISO: %d" % (shot, config[0], config[1])
+            print "Shot: %d Shutter: %ss ISO: %d" % (shot, config[0], config[1])
             sys.stdout.flush()
 
             camera.set_shutter_speed(secs=config[0])
@@ -115,17 +115,22 @@ def main():
             print "Shot: %d Brightness: %s" % (shot, brightness)
             sys.stdout.flush()
 
-            if brightness < MIN_BRIGHTNESS and current_config < len(CONFIGS) - 1:
-                current_config = current_config + 1
-            elif brightness > MAX_BRIGHTNESS and current_config > 0:
-                current_config = current_config - 1
+            if brightness < TARGET_BRIGHTNESS * 0.9 and current_config < len(CONFIGS) - 1:
+                if TARGET_BRIGHTNESS - brightness > TARGET_BRIGHTNESS * 0.25 and current_config < len(CONFIGS) - 6:
+                    current_config += 6
+                else:
+                    current_config += 1
+            elif brightness > TARGET_BRIGHTNESS * 1.1 and current_config > 0:
+                if brightness - TARGET_BRIGHTNESS > TARGET_BRIGHTNESS * 0.25 and current_config > 6:
+                    current_config -= 6
+                else:
+                    current_config -= 1
             else:
                 if last_started and last_acquired and last_acquired - last_started < MIN_INTER_SHOT_DELAY_SECONDS:
                     sleep_for = max((MIN_INTER_SHOT_DELAY_SECONDS - (last_acquired - last_started)).seconds, 0);
                     print "Sleeping for %s" % str(sleep_for)
                     sys.stdout.flush()
                     time.sleep(sleep_for)
-            shot = shot + 1
     except Exception,e:
         print str(e)
 
