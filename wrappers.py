@@ -34,7 +34,7 @@ class RaspiStill(Wrapper):
     def __init__(self, subprocess):
         Wrapper.__init__(self, subprocess)
 	# Create a thumbnail with a useful size for mean brightness checks
-        self._CMD = 'raspistill --nopreview --encoding jpg --width 1920 --height 1080 --quality 96 --thumb 512:288:80 --timeout 200 --awb cloud'
+        self._CMD = 'raspistill --nopreview --encoding jpg --width 1920 --height 1080 --quality 96 --thumb 512:288:80 --timeout 200 --exposure off --awb cloud'
 
     def capture_image_and_download(self):
 	time = datetime.now()
