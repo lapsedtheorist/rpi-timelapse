@@ -101,9 +101,10 @@ def main():
                 current_config = current_config - 1
             else:
                 if last_started and last_acquired and last_acquired - last_started < MIN_INTER_SHOT_DELAY_SECONDS:
-                    print "Sleeping for %s" % str(MIN_INTER_SHOT_DELAY_SECONDS - (last_acquired - last_started))
+                    sleep_for = max((MIN_INTER_SHOT_DELAY_SECONDS - (last_acquired - last_started)).seconds, 0);
+                    print "Sleeping for %s" % str(sleep_for)
                     sys.stdout.flush()
-                    time.sleep((MIN_INTER_SHOT_DELAY_SECONDS - (last_acquired - last_started)).seconds)
+                    time.sleep(sleep_for)
             shot = shot + 1
     except Exception,e:
         print str(e)
