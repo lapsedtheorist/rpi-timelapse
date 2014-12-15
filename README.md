@@ -23,10 +23,17 @@ Clone this repo into the home directory of the `pi` user and merge the example
 `rc.local` file with your system's `/etc/rc.local` (assuming you're using
 Raspbian) to have it run on startup if there's no `wlan0` interface.
 
-To run it manually, start it with `/home/pi/rpi-timelapse/timelapse.py &` and
-stop it with `ps auxwww | grep timelapse.py | head -1 | awk '{print $2}' |
-xargs kill -9`.
+To run it manually, start it with
 
+```Shell
+/home/pi/rpi-timelapse/timelapse.py &
+```
+
+and stop it with
+
+```Shell
+ps aux|grep 'python.*/timelapse.py$'|awk 'NR==1 {print $2}'|xargs kill -9
+```
 
 Dependencies
 ------------
