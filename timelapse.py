@@ -116,19 +116,19 @@ def main():
             sys.stdout.flush()
 
             if brightness < TARGET_BRIGHTNESS * 0.9 and current_config < len(CONFIGS) - 1:
-                if TARGET_BRIGHTNESS - brightness > TARGET_BRIGHTNESS * 0.25 and current_config < len(CONFIGS) - 6:
-                    current_config += 6
+                if TARGET_BRIGHTNESS - brightness > TARGET_BRIGHTNESS * 0.25 and current_config < len(CONFIGS) - 3:
+                    current_config += 3
                 else:
                     current_config += 1
             elif brightness > TARGET_BRIGHTNESS * 1.1 and current_config > 0:
-                if brightness - TARGET_BRIGHTNESS > TARGET_BRIGHTNESS * 0.25 and current_config > 6:
-                    current_config -= 6
+                if brightness - TARGET_BRIGHTNESS > TARGET_BRIGHTNESS * 0.25 and current_config > 3:
+                    current_config -= 3
                 else:
                     current_config -= 1
             else:
                 if last_started and last_acquired and last_acquired - last_started < MIN_INTER_SHOT_DELAY_SECONDS:
                     sleep_for = max((MIN_INTER_SHOT_DELAY_SECONDS - (last_acquired - last_started)).seconds, 0);
-                    print "Sleeping for %s" % str(sleep_for)
+                    print "Sleeping for %ss" % str(sleep_for)
                     sys.stdout.flush()
                     time.sleep(sleep_for)
     except Exception,e:
