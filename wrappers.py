@@ -14,16 +14,16 @@ class Wrapper(object):
         out, err = p.communicate()
         return p.returncode, out.rstrip(), err.rstrip()
 
-class Identify(Wrapper):
-    """ A class which wraps calls to the external identify process. """
+class Analyse(Wrapper):
+    """ A class which wraps calls to the external jhead/imagemagick process. """
 
     def __init__(self, subprocess):
         Wrapper.__init__(self, subprocess)
-        self._CMD = 'convert'
+        self._CMD = 'jhead'
 
     def mean_brightness(self, filepath):
 	# Use the thumbnail for the mean brightness check, because it's faster than using the full image
-        code, out, err = self.call(self._CMD + ' ' + filepath + ' thumbnail:- | identify -format "%[mean]" -')
+        code, out, err = self.call(self._CMD + ' -st - ' + filepath + ' | identify -format "%[mean]" -')
         if code != 0:
             raise Exception(err)
         return out

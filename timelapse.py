@@ -8,7 +8,7 @@ import sys
 import os
 
 from wrappers import RaspiStill
-from wrappers import Identify
+from wrappers import Analyse
 
 logfile = os.path.dirname(os.path.realpath(__file__)) + "/timelapse.log"
 sys.stdout = open(logfile, 'w')
@@ -79,7 +79,7 @@ CONFIGS = [
 def main():
     print "Timelapse starting at %s" % (time.asctime())
     camera = RaspiStill(subprocess)
-    idy = Identify(subprocess)
+    info = Analyse(subprocess)
 
     current_config = 19
     shot = 0
@@ -109,7 +109,7 @@ def main():
             sys.stdout.flush()
 
             prev_acquired = last_acquired
-            brightness = float(idy.mean_brightness(filename))
+            brightness = float(info.mean_brightness(filename))
             last_acquired = datetime.now()
 
             print "Shot: %d Brightness: %s" % (shot, brightness)

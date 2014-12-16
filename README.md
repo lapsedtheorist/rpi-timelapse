@@ -39,5 +39,6 @@ Dependencies
 ------------
 
 Requires `imagemagick` to perform autocorrection of exposure settings based on
-the mean brightness of the last photo. Created and tested on Raspbian, may not
-play nicely with others.
+the mean brightness of the last photo. Requires `jhead` to extract the
+thumbnail from the EXIF data to make analysing mean brightness more efficient.
+Created and tested on Raspbian, may not play nicely with others.
