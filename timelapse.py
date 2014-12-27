@@ -116,7 +116,7 @@ def main():
 
             health = sysinfo.stats()
 
-            print "Shot: %d Brightness: %s System Health - %s" % (shot, brightness, health)
+            print "Shot: %d Brightness: %s System Health: %s" % (shot, brightness, health)
             sys.stdout.flush()
 
             if brightness < TARGET_BRIGHTNESS * 0.8 and current_config < len(CONFIGS) - 1:
