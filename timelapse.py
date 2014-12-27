@@ -15,7 +15,7 @@ logfile = os.path.dirname(os.path.realpath(__file__)) + "/timelapse.log"
 sys.stdout = open(logfile, 'w')
 
 MIN_INTER_SHOT_DELAY_SECONDS = timedelta(seconds=30)
-TARGET_BRIGHTNESS = 25000 # Acceptable values +/- 10%
+TARGET_BRIGHTNESS = 25000 # Acceptable values +/- 20%
 
 CONFIGS = [
 	("1/8000", 100),
@@ -119,13 +119,13 @@ def main():
             print "Shot: %d Brightness: %s System Health - %s" % (shot, brightness, health)
             sys.stdout.flush()
 
-            if brightness < TARGET_BRIGHTNESS * 0.9 and current_config < len(CONFIGS) - 1:
-                if TARGET_BRIGHTNESS - brightness > TARGET_BRIGHTNESS * 0.25 and current_config < len(CONFIGS) - 3:
+            if brightness < TARGET_BRIGHTNESS * 0.8 and current_config < len(CONFIGS) - 1:
+                if TARGET_BRIGHTNESS - brightness > TARGET_BRIGHTNESS * 0.333 and current_config < len(CONFIGS) - 3:
                     current_config += 3
                 else:
                     current_config += 1
-            elif brightness > TARGET_BRIGHTNESS * 1.1 and current_config > 0:
-                if brightness - TARGET_BRIGHTNESS > TARGET_BRIGHTNESS * 0.25 and current_config > 3:
+            elif brightness > TARGET_BRIGHTNESS * 1.2 and current_config > 0:
+                if brightness - TARGET_BRIGHTNESS > TARGET_BRIGHTNESS * 0.333 and current_config > 3:
                     current_config -= 3
                 else:
                     current_config -= 1
