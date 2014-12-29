@@ -85,6 +85,7 @@ def main():
 
     current_config = 19
     shot = 0
+    failures = 0
     prev_acquired = None
     last_acquired = None
     last_started = None
@@ -103,10 +104,16 @@ def main():
               filename = camera.capture_image_and_download()
             except Exception, e:
               print "Error on capture: " + str(e)
+              failures += 1
+              if failures > 2:
+                  print "3 successive failures: the camera doesn't work!"
+                  sys.stdout.flush()
+                  break
               print "Retrying..."
               sys.stdout.flush()
               # Occasionally, capture can fail but retries will be successful.
               continue
+            failures = 0
             print "Shot: %d Filename: %s" % (shot, filename)
             sys.stdout.flush()
 
