@@ -15,23 +15,17 @@ class Wrapper(object):
         return p.returncode, out.rstrip(), err.rstrip()
 
 class SystemStats(Wrapper):
-    """ A class which wraps system calls to measure temperature and voltage. """
+    """ A class which wraps system calls to measure temperature """
 
     def __init__(self, subprocess):
         Wrapper.__init__(self, subprocess)
         self._CMD = 'vcgencmd'
 
     def stats(self):
-	return self.voltage() + ' ' + self.temperature()
-
-    def voltage(self):
-        code, out, err = self.call(self._CMD + ' measure_temp')
-        if code != 0:
-            raise Exception(err)
-        return out
+	return self.temperature()
 
     def temperature(self):
-        code, out, err = self.call(self._CMD + ' measure_volts')
+        code, out, err = self.call(self._CMD + ' measure_temp')
         if code != 0:
             raise Exception(err)
         return out
