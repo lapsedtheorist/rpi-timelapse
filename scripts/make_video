@@ -1,0 +1,2 @@
+#!/bin/bash
+(cd $(dirname $(dirname $0)) && ffmpeg -pattern_type glob -i 'photos/*.jpg' -c:v libx264 timelapse.mp4)
