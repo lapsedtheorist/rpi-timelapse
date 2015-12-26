@@ -26,13 +26,13 @@ Raspbian) to have it run on startup if there's no `wlan0` interface.
 To run it manually, start it with
 
 ```Shell
-/home/pi/rpi-timelapse/timelapse.py &
+scripts/start_timelapse
 ```
 
 and stop it with
 
 ```Shell
-ps aux|grep 'python.*/timelapse.py$'|awk 'NR==1 {print $2}'|xargs kill -9
+scripts/stop_timelapse
 ```
 
 Dependencies
@@ -41,4 +41,5 @@ Dependencies
 Requires `imagemagick` to perform autocorrection of exposure settings based on
 the mean brightness of the last photo. Requires `jhead` to extract the
 thumbnail from the EXIF data to make analysing mean brightness more efficient.
-Created and tested on Raspbian, may not play nicely with others.
+Created and tested on Raspbian, may not play nicely with others. Requires
+ffmpeg and libx264 for making videos.

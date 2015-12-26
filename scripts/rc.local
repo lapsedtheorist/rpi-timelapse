@@ -19,7 +19,7 @@ if [ "$_IP" ]; then
 elif [ ! "$_WIFI" ]; then
 	# If there's no Wifi interface, start the timelapse...
 	echo "Starting Timelapse"
-	su -c '/home/pi/rpi-timelapse/timelapse.py &' pi
+	su -c '/home/pi/rpi-timelapse/scripts/start_timelapse' pi
 fi
 
 exit 0
